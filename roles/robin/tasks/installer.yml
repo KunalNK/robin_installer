@@ -1,0 +1,29 @@
+---
+  # ansible-playbook installer.yml
+  - name: run tasks on localhost
+    hosts: localhost
+    become: True
+    gather_facts: no
+
+    vars_prompt: 
+      - name: Enter the user name
+        prompt: "{{ username }}" 
+        private: no 
+      - name: "Enter the robin password" 
+        prompt: "{{ password }}" 
+        private: yes
+
+    tasks:
+
+      - name: run shell script
+        command: bash ./robin-install-k8s_{{ version }}.sh
+
+      - name: Extract robin-image-archive
+        unarchive:
+          src: /tmp/robinsrcimg-{{ version }}.tar.gz
+          
+
+      - name: Extract k8s-image-archive
+        unarchive:
+          src: /tmp/k8s-images-{{ version }}.tar.gz
+          
